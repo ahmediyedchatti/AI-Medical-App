@@ -1,0 +1,44 @@
+@startuml UC_Medical_ChatBot
+
+skinparam actorStyle awesome
+skinparam classAttributeIconSize 0
+skinparam usecase {
+  BackgroundColor #EEF2FF
+  BorderColor #534AB7
+  FontColor #3C3489
+}
+skinparam actor {
+  BackgroundColor #F8F8F8
+  BorderColor #888780
+}
+
+left to right direction
+title Use Case Diagram - AI Medical ChatBot
+
+actor "User" as User
+actor "Maps API" as Maps
+
+rectangle "AI Medical ChatBot System" {
+
+  usecase "Ask a medical question" as UC1
+  usecase "Critical emergency" as UC2 #FCEBEB
+  usecase "Severe non-emergency" as UC3 #FAEEDA
+  usecase "Non-urgent case" as UC4 #E1F5EE
+  usecase "Out of medical scope" as UC5 #F1EFE8
+  usecase "Locate hospitals" as UC6 #FCEBEB
+  usecase "Locate doctors" as UC7 #FAEEDA
+
+  UC1 ..> UC2 : <<include>>
+  UC1 ..> UC3 : <<include>>
+  UC1 ..> UC4 : <<include>>
+  UC1 ..> UC5 : <<include>>
+
+  UC2 ..> UC6 : <<extend>>
+  UC3 ..> UC7 : <<extend>>
+}
+
+User --> UC1
+UC6 --> Maps
+UC7 --> Maps
+
+@enduml

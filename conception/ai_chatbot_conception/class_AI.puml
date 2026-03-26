@@ -1,0 +1,100 @@
+@startuml Class_Medical_ChatBot
+
+skinparam classAttributeIconSize 0
+skinparam class {
+  BackgroundColor #F8F9FF
+  BorderColor #185FA5
+  HeaderBackgroundColor #E6F1FB
+  FontColor #0C447C
+  AttributeFontColor #444441
+}
+title Class Diagram - AI Medical ChatBot
+
+enum UrgencyLevel {
+  URGENT
+  SEVERE
+  NON_URGENT
+  OUT_OF_SCOPE
+}
+
+abstract class Response {
+  - message : String
+  - urgencyLevel : UrgencyLevel
+  --
+  + {abstract} display() : void
+}
+
+class User {
+  - userId : String
+  - sessionId : String
+  --
+  + askQuestion(query : String) : void
+  + getResponse() : String
+}
+
+class Chatbot {
+  - model : String
+  - version : String
+  --
+  + processQuery(query : String) : Response
+  + classifyUrgency(query : String) : UrgencyLevel
+  + generateReply() : String
+}
+
+class MedicalQuery {
+  - content : String
+  - timestamp : DateTime
+  - isInScope : Boolean
+  --
+  + validate() : Boolean
+  + getContent() : String
+}
+
+class MapsAPI {
+  - apiKey : String
+  - baseUrl : String
+  --
+  + getNearbyHospitals(location : String) : List
+  + getNearbyDoctors(location : String) : List
+}
+
+class UrgentResponse {
+  - emergencyMessage : String
+  - contactInfo : String
+  --
+  + alertUser() : void
+}
+
+class SevereResponse {
+  - doctorMessage : String
+  - nearbyServices : List
+  --
+  + redirectToMap() : void
+}
+
+class InfoResponse {
+  - medicalInfo : String
+  - disclaimer : String
+  --
+  + provideInfo() : void
+}
+
+class OutOfScopeResponse {
+  - refusalMessage : String
+  --
+  + refuse() : void
+}
+
+' Relationships
+User "1" --> "1" Chatbot : interacts with
+Chatbot "1" *-- "1..*" MedicalQuery : composes
+Chatbot ..> Response : <<creates>>
+Chatbot ..> UrgencyLevel : <<uses>>
+Response <|-- UrgentResponse
+Response <|-- SevereResponse
+Response <|-- InfoResponse
+Response <|-- OutOfScopeResponse
+UrgentResponse ..> MapsAPI : <<uses>>
+SevereResponse ..> MapsAPI : <<uses>>
+
+@enduml
