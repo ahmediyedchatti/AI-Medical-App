@@ -1,5 +1,5 @@
 # AI-Medical-App
-## Collaborateurs :
+## Collaborators :
 
 - [Ahmed Iyed Chatti (ahmediyedchatti)](https://github.com/ahmediyedchatti)
 - [Karima Ben Dhiab (karimabendhiab58-eng)](https://github.com/karimabendhiab58-eng)
