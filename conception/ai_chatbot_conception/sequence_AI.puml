@@ -1,0 +1,55 @@
+@startuml Sequence_Medical_ChatBot
+
+skinparam classAttributeIconSize 0
+skinparam sequence {
+  ActorBackgroundColor #EEF2FF
+  ActorBorderColor #534AB7
+  ParticipantBackgroundColor #E6F1FB
+  ParticipantBorderColor #185FA5
+  LifeLineBorderColor #888780
+  ArrowColor #3C3489
+  BoxBackgroundColor #F8F9FF
+  BoxBorderColor #B4B2A9
+}
+title Sequence Diagram - AI Medical ChatBot
+
+actor "User" as User
+participant "Chatbot" as Bot
+participant "MapsAPI" as Maps
+
+User -> Bot : askQuestion(query)
+activate Bot
+
+Bot -> Bot : validate(query)
+
+alt Out of medical scope
+  Bot --> User : "I can only answer medical-related questions"
+
+else Non-urgent case
+  Bot -> Bot : classifyUrgency() = NON_URGENT
+  Bot -> Bot : generateReply()
+  Bot --> User : medical information\n+ "Please consult a doctor for proper diagnosis"
+
+else Severe non-emergency (high fever...)
+  Bot -> Bot : classifyUrgency() = SEVERE
+  Bot -> Maps : getNearbyDoctors(location)
+  activate Maps
+  Maps --> Bot : doctors / clinics list
+  deactivate Maps
+  Bot --> User : "Request a doctor or nurse immediately"
+  Bot --> User : redirect to map\n(medical locations pinned)
+
+else Critical emergency
+  Bot -> Bot : classifyUrgency() = URGENT
+  Bot -> Maps : getNearbyHospitals(location)
+  activate Maps
+  Maps --> Bot : hospitals list
+  deactivate Maps
+  Bot --> User : "URGENT: Go to the hospital!\nCall emergency services NOW!"
+  Bot --> User : redirect to map\n(hospital locations pinned)
+
+end
+
+deactivate Bot
+
+@enduml
